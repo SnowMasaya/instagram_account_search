@@ -82,7 +82,10 @@ DOCKER_RUN_INSTA_API:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:r
 # for info on how this work and what $< and $(@F) mean.
 images/% : dockerfiles/% pull
 	ln -sf $< Dockerfile
+	rm -rf line_api
 	cp -rf ../line_api line_api
+	rm -rf insta_api
+	cp -rf ../insta_api insta_api
 	docker build -t $(REPO_NAME)/$(@F) .
 	#rm Dockerfile
 

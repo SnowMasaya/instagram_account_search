@@ -2,36 +2,40 @@
 # Initial Setting
 #################################################################################################################
 FROM ubuntu:14.04
-ENV line_api_user_name line_api
-ENV line_api_password l_pass
-ENV line_api_home /usr/share/line_api
+ENV insta_api_user_name insta_api
+ENV insta_api_password i_pass
+ENV insta_api_home /usr/share/insta_api
 ENV PYTHON_VERSION 3.5.0
 ENV PYENV_ROOT /usr/local/pyenv
 #################################################################################################################
 #   Install Initial Paramater
 #################################################################################################################
-RUN apt-get update && apt-get install -y git gcc g++ vim python3-pip language-pack-ja-base language-pack-ja ibus-mozc nkf && \
+RUN apt-get update && apt-get install -y Xvfb wget git gcc g++ vim python3-pip language-pack-ja-base firefox \
+    language-pack-ja ibus-mozc nkf && \
     update-locale LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja"
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-linux64.tar.gz \
+    -P /usr/local/bin/
 # Off the beep sound
 RUN echo set bell-style none >> /root/.inputrc
 
-RUN mkdir -p /usr/share/line_api
-RUN useradd -b ${line_api_home} -p ${line_api_password} -d ${line_api_home} ${line_api_user_name} && \
-    echo ${line_api_user_name}:${line_api_password} | chpasswd && \
-    echo "line_api  ALL=(ALL)       ALL" >> /etc/sudoers && \
-    chown -R line_api /usr/share/line_api
+RUN mkdir -p /usr/share/insta_api
+RUN useradd -b ${insta_api_home} -p ${insta_api_password} -d ${insta_api_home} ${insta_api_user_name} && \
+    echo ${insta_api_user_name}:${insta_api_password} | chpasswd && \
+    echo "insta_api  ALL=(ALL)       ALL" >> /etc/sudoers && \
+    chown -R insta_api /usr/share/insta_api
 #################################################################################################################
 #           Python Setting
 #################################################################################################################
 RUN rm -rf /usr/bin/python && \
     ln -s /usr/bin/python3 /usr/bin/python
-ADD pip3.5-requirement.txt /usr/share/line_api/
-RUN cd /usr/share/line_api/ && /usr/bin/pip3 install -r pip3.5-requirement.txt
+ADD pip3.5-requirement_insta.txt /usr/share/insta_api/
+RUN cd /usr/share/insta_api/ && /usr/bin/pip3 install -r pip3.5-requirement_insta.txt
 #################################################################################################################
 #			COPY Setting Code in the Docker enviroment			#
 #################################################################################################################
-COPY line_api /usr/share/line_api
-RUN chmod -R 777 /usr/share/line_api
-WORKDIR /usr/share/line_api
-USER line_api
+COPY insta_api /usr/share/insta_api
+RUN /usr/share/insta_api/img
+RUN chmod -R 777 /usr/share/insta_api
+WORKDIR /usr/share/insta_api
+USER insta_api
 RUN . /etc/default/locale

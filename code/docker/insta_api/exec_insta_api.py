@@ -8,15 +8,16 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "."))
 from os import path
 APP_ROOT = path.dirname(path.abspath(__file__))
 from argparse import ArgumentParser
-from line_api import *
+from insta_api import InstaApi
 
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+        usage='Usage: python ' + __file__ + ' [--query <query>] [--help]'
     )
-    arg_parser.add_argument('-p', '--port', default=8000, help='port')
-    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    arg_parser.add_argument('-q', '--query', default="", help='query')
     options = arg_parser.parse_args()
 
-    app.run(debug=options.debug, port=options.port)
+    insta_api_instance = InstaApi()
+
+    print(insta_api_instance.search_tag(query=options.query))

@@ -20,4 +20,4 @@ if __name__ == "__main__":
 
     insta_api_instance = InstaApi()
 
-    insta_api_instance.search_tag(query=options.query)
+    print(insta_api_instance.search_tag(query=options.query))
