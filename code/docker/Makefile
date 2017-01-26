@@ -71,7 +71,8 @@ TAG=$(shell echo $$CIRCLE_SHA1 | cut -c 1-7)
 # Define linked containers (these name should match keys in
 # fig.ml). The test & test-ci targets wil be run with all links set
 # correctly.
-DOCKER_RUN_KAGGLE:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 8888:8888 -it $(REPO_NAME)/InstaSearch bash
+DOCKER_RUN_INSTA_SEARCH:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 8888:8888 -it $(REPO_NAME)/insta-search bash
+DOCKER_RUN_LINE_API:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 8000:8000 -it $(REPO_NAME)/line-api bash
 
 # Wildcard rule to build an image from a file inside dockerfiles/
 # Use the tasks like any other dependency. Order may be controller
@@ -80,6 +81,7 @@ DOCKER_RUN_KAGGLE:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -
 # for info on how this work and what $< and $(@F) mean.
 images/% : dockerfiles/% pull
 	ln -sf $< Dockerfile
+	cp -rf ../line_api line_api
 	docker build -t $(REPO_NAME)/$(@F) .
 	#rm Dockerfile
 
@@ -94,8 +96,11 @@ test:
 # NOTE: Cannot use --rm on Circle CI, hence the seemingly
 # duplicate task.
 
-test-insta-search : images/InstaSearch
-	$(DOCKER_RUN_KAGGLE)
+test-insta-search : images/insta-search
+	$(DOCKER_RUN_INSTA_SEARCH)
+
+test-line-api : images/line-api
+	$(DOCKER_RUN_LINE_API)
 
 teardown:
 	$(DOCKER_COMPOSE) stop
