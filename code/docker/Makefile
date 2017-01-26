@@ -66,13 +66,14 @@ TAG=$(shell echo $$CIRCLE_SHA1 | cut -c 1-7)
 
 .DEFAULT_GOAL:= build
 
-.PHONY: pull export import environment test-python-science teardown
+.PHONY: pull export import environment test-lina-api test-insta-api teardown
 
 # Define linked containers (these name should match keys in
 # fig.ml). The test & test-ci targets wil be run with all links set
 # correctly.
 DOCKER_RUN_INSTA_SEARCH:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 8888:8888 -it $(REPO_NAME)/insta-search bash
 DOCKER_RUN_LINE_API:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 8000:8000 -it $(REPO_NAME)/line-api bash
+DOCKER_RUN_INSTA_API:=docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 8000:8000 -it $(REPO_NAME)/insta-api bash
 
 # Wildcard rule to build an image from a file inside dockerfiles/
 # Use the tasks like any other dependency. Order may be controller
@@ -101,6 +102,9 @@ test-insta-search : images/insta-search
 
 test-line-api : images/line-api
 	$(DOCKER_RUN_LINE_API)
+
+test-insta-api : images/insta-api
+	$(DOCKER_RUN_INSTA_API)
 
 teardown:
 	$(DOCKER_COMPOSE) stop

@@ -1,1 +1,1 @@
-dockerfiles/line-api
+dockerfiles/insta-api
