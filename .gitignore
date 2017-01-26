@@ -98,5 +98,5 @@ data/*
 Data/*
 disk.vdi
 *.pkl
-config/*
-config/
+conf/*
+conf/
