@@ -24,7 +24,9 @@ ACCOUNT_NAME=$1
 WORKDIR=`pwd`
 
 # Setting virtual browser and setting firefox
-export DISPLAY=:1
+echo "export DISPLAY=:1" >> ~/.bashrc
+sh ~/.bashrc
 Xvfb :1 -screen 0 1024x768x24 > /dev/null &
 firefox --display=:1&
-python insta_api.py ${ACCOUNT_NAME} ${WORKDIR}/img/
+mkdir ${WORKDIR}/img/${ACCOUNT_NAME}
+python insta_api.py ${ACCOUNT_NAME} ${WORKDIR}/img/${ACCOUNT_NAME}

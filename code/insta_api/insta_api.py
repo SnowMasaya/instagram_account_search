@@ -3,6 +3,7 @@
 insta_raider.py
 usage: insta_raider.py [-h] -u USERNAME
 @amirkurtovic
+https://github.com/akurtovic/InstaRaider
 """
 import argparse
 import logging

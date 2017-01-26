@@ -34,8 +34,8 @@ RUN cd /usr/share/insta_api/ && /usr/bin/pip3 install -r pip3.5-requirement_inst
 #################################################################################################################
 #			COPY Setting Code in the Docker enviroment			#
 #################################################################################################################
-COPY insta_api /usr/share/insta_api
 RUN pip3 install -U selenium
+COPY insta_api /usr/share/insta_api
 RUN mkdir /usr/share/insta_api/img
 RUN chmod -R 777 /usr/share/insta_api
 WORKDIR /usr/share/insta_api
